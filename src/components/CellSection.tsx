@@ -4,6 +4,7 @@ import { Cell, IconContainer, Section } from '@telegram-apps/telegram-ui';
 import { Icon28Chat } from '@telegram-apps/telegram-ui/dist/icons/28/chat';
 import { Icon28Devices } from '@telegram-apps/telegram-ui/dist/icons/28/devices';
 import { Icon28Stats } from '@telegram-apps/telegram-ui/dist/icons/28/stats';
+import { Link } from 'react-router-dom';
 
 type CellProps = {
   id: number;
@@ -30,14 +31,12 @@ const cells: CellProps[] = [
 ];
 
 export const CellSection = () => (
-  <Section header="This is section header" footer="And this is footer">
-    {cells.map((cell) => (
-      <Cell
-        key={cell.id}
-        before={<IconContainer>{cell.icon}</IconContainer>}
-      >
-        {cell.text}
-      </Cell>
-    ))}
+  <Section header="This is section header">
+    <Link to="/cell" style={{ textDecoration: 'none' }}>
+      <div style={{ padding: '16px', color: 'var(--tgui--text_color)' }}>前往 Pin页面</div>
+    </Link>
+    <Link to="/form" style={{ textDecoration: 'none' }}>
+      <div style={{ padding: '16px', color: 'var(--tgui--text_color)' }}>前往表单页面</div>
+    </Link>
   </Section>
 );

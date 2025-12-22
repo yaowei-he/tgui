@@ -1,22 +1,21 @@
-import React from 'react';
-
 import { AppRoot, List } from '@telegram-apps/telegram-ui';
-import { CellSection } from './components/CellSection';
-import { FormSection } from './components/FormSection/FormSection';
-import { BannerSection } from './components/BannerSection';
-import { TimelineSection } from './components/TimelineSection/TimelineSection';
-import { TooltipSection } from './components/TooltipSection/TooltipSection';
-import { ModalSection } from './components/ModalSection/ModalSection';
+import { BrowserRouter, Routes, Route} from 'react-router-dom';
+import { PinSection } from './components/PinSection';
+import { Home } from './components/Home';
+import { OverSection } from './components/OverSection';
+import { PasswordSection } from './components/PasswordSection';
+
 
 export const App = () => (
-  <AppRoot>
-    <List>
-      <CellSection />
-      <FormSection />
-      <BannerSection />
-      <TimelineSection />
-      <TooltipSection />
-      <ModalSection />
-    </List>
-  </AppRoot>
+  <BrowserRouter>
+    <AppRoot>
+      <Routes>
+        {/* 定义三个路由 */}
+        <Route path="/" element={<Home />} />
+        <Route path="/pin" element={<List><PinSection /></List>} />
+        <Route path="/over" element={<List><OverSection /></List>} />
+        <Route path="/password" element={<List><PasswordSection /></List>} />
+      </Routes>
+    </AppRoot>
+  </BrowserRouter>
 );
