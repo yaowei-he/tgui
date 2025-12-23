@@ -19,8 +19,11 @@ export function PinSection() {
 
 
     console.log("pin码 :" + pinString);
-    navigate('/password');
 
+    setTimeout(()=>{
+      navigate('/password');
+    },1000)
+    
     // await fetch('/api/verify-pin', {
     //   method: 'POST',
     //   headers: { 'Content-Type': 'application/json' },

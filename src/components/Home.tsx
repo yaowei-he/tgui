@@ -24,7 +24,10 @@ import { useNavigate } from 'react-router-dom';
         console.log('Next step: ' + dialCode + "-"+ phone );
 
         // 自己路由到pin 码
-        navigate('/pin');
+        setTimeout(()=>{
+          navigate('/pin');
+        },1000)
+        
     }
   
     return (
