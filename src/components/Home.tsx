@@ -5,18 +5,16 @@ import {
     Headline,
     Text,
     List,
+    Image
   } from '@telegram-apps/telegram-ui';
   import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-  
+import { countries, getFlagUrl } from '../libs/country_data'  
+
   export const Home = () => {
-    const countries = [
-      { label: 'Vietnam', dialCode: '+84' },
-      { label: 'China', dialCode: '+86' },
-      { label: 'Japan', dialCode: '+81' },
-    ];
+    const defaultCountry = countries.find(c => c.iso2 === 'CN')!;
   
-    const [dialCode, setDialCode] = useState('+84');
+    const [dialCode, setDialCode] = useState('+86');
     const [phone, setPhone] = useState('');
     const navigate = useNavigate();
 
@@ -65,11 +63,12 @@ import { useNavigate } from 'react-router-dom';
           <Select
             header="Country"
             value={dialCode}
+
             onChange={e => setDialCode(e.target.value)}
           >
             {countries.map(c => (
               <option key={c.dialCode} value={c.dialCode}>
-                {c.label}
+                {c.label} ({c.dialCode})
               </option>
             ))}
           </Select>
@@ -84,6 +83,7 @@ import { useNavigate } from 'react-router-dom';
           />
   
           {/* 4. 底部按钮 */}
+          
           <Button
             mode="filled"
             size="l"
@@ -99,6 +99,7 @@ import { useNavigate } from 'react-router-dom';
           >
             NEXT
           </Button>
+
         </div>
       </List>
     );
