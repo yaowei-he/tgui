@@ -4,8 +4,7 @@ import {
     Button,
     Headline,
     Text,
-    List,
-    Image
+    List
   } from '@telegram-apps/telegram-ui';
   import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
