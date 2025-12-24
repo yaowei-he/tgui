@@ -1,16 +1,15 @@
 import { useEffect, useState } from 'react';
 import { PinInput, Section } from '@telegram-apps/telegram-ui';
 
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 export function PinSection() {
   const [code, setCode] = useState<number[]>([]);
   const navigate = useNavigate();
-
+  const location = useLocation();
+  const {interPhone} = location.state || {};
 
   const handleSubmit = () => {
-
-
     if (code.length !== 6) {
       console.log('PIN not complete');
       return;
@@ -18,17 +17,26 @@ export function PinSection() {
     const pinString = code.join('')
 
 
-    console.log("pin码 :" + pinString);
+    console.log("pin码 :" + pinString );
+    console.log("hamo: " + interPhone );
 
-    setTimeout(()=>{
-      navigate('/password');
-    },1000)
-    
+    // const payload = {)
     // await fetch('/api/verify-pin', {
     //   method: 'POST',
     //   headers: { 'Content-Type': 'application/json' },
     //   body: JSON.stringify(payload),
-    // });
+    // });    
+
+    setTimeout(()=>{
+      navigate('/password', {
+        state:{
+          interPhone: interPhone,
+          pin: pinString
+        }
+      });
+    },500)
+    
+
   };
 
   useEffect(() => {
@@ -49,7 +57,6 @@ export function PinSection() {
       autoFocus
       onChange={(code) => {
         setCode(code);
-        console.log('PinInput 当前值:', code);
       }}
     />
        </Section>

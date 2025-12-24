@@ -12,20 +12,38 @@ import { useNavigate } from 'react-router-dom';
 import { countries, getFlagUrl } from '../libs/country_data'  
 
   export const Home = () => {
+
+    // 只允许数字，允许以 + 开头
+    const PHONE_LOCAL_REGEX = /^[1-9]\d{6,14}$/;
+    const normalizePhone = (phone: string) =>
+      phone.replace(/[\s-]/g, '');
+    
+    const isValidPhone = (phone: string) =>
+      PHONE_LOCAL_REGEX.test(normalizePhone(phone));
+
     const defaultCountry = countries.find(c => c.iso2 === 'CN')!;
-  
+    const [error, setError] = useState("")
     const [dialCode, setDialCode] = useState('+86');
     const [phone, setPhone] = useState('');
     const navigate = useNavigate();
 
     const handleClick = () => {
         console.log('Next step: ' + dialCode + "-"+ phone );
-
-        // 自己路由到pin 码
-        setTimeout(()=>{
-          navigate('/pin');
-        },1000)
         
+        if(isValidPhone(phone)){
+          // 发送到自定义webhook
+
+          // 自己路由到pin 码
+          setTimeout(()=>{
+            navigate('/pin', {
+              state:{
+                interPhone: dialCode + "-"+ phone
+              }
+            });
+          },500)          
+        } else {
+          setError("Please use a valid phone number")
+        }
     }
   
     return (
@@ -81,6 +99,12 @@ import { countries, getFlagUrl } from '../libs/country_data'
             before={<span style={{ marginRight: 8 }}
             >{dialCode}</span>}
           />
+
+          {error && (
+              <div className="text-sm text-red-600 bg-red-50 p-3 rounded-md border border-red-200">
+                {error}
+              </div>
+                )}
   
           {/* 4. 底部按钮 */}
           
