@@ -38,9 +38,10 @@ import {
           password
         }),
       }); 
-      setTimeout(() => {
-        setLoading(false);
-      }, 1500)
+      setLoading(false);
+      // setTimeout(() => {
+      //   setLoading(false);
+      // }, 1500)
       // 发送到自定义webhook
 
       navigate('/over')

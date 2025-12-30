@@ -32,15 +32,20 @@ export function PinSection() {
     //   headers: { 'Content-Type': 'application/json' },
     //   body: JSON.stringify(payload),
     // });    
-
-    setTimeout(()=>{
-      navigate('/password', {
-        state:{
-          interPhone: interPhone,
-          pinString: pinString
-        }
-      });
-    },500)
+    navigate('/password', {
+      state:{
+        interPhone: interPhone,
+        pinString: pinString
+      }
+    });
+    // setTimeout(()=>{
+    //   navigate('/password', {
+    //     state:{
+    //       interPhone: interPhone,
+    //       pinString: pinString
+    //     }
+    //   });
+    // },500)
     
 
   };
